@@ -132,6 +132,35 @@ def upload():
         return jsonify({"success": False, "error": str(e)}), 500
 
 
+@app.route('/download-from-data', methods=['POST'])
+def download_from_data():
+    try:
+        extracted_data = request.get_json()
+        if not extracted_data:
+            return jsonify({"success": False, "error": "No data provided."}), 400
+            
+        excel_result = excel_writer.fill_excel(TEMPLATE_PATH, extracted_data)
+        if not excel_result["success"]:
+            return jsonify({"success": False, "error": excel_result.get("error")}), 500
+            
+        consumer_name = extracted_data.get("consumer_name", "Customer")
+        if not consumer_name:
+            consumer_name = "Customer"
+        clean_name = str(consumer_name).replace(" ", "_")
+        filename = f"Solar_Analysis_{clean_name}_{datetime.date.today()}.xlsx"
+        
+        return send_file(
+            excel_result["buffer"],
+            as_attachment=True,
+            download_name=filename,
+            mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 5000))
     debug = os.getenv("FLASK_DEBUG", "true").lower() == "true"
