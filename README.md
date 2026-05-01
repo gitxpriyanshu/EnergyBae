@@ -1,60 +1,71 @@
-# Energybae Solar Load Calculator ⚡
+# Energybae Solar Load Calculator
 
-A professional full-stack web application designed to automate the extraction of data from Indian **MSEDCL** electricity bills using AI. The application processes bill images or PDFs and populates a specialized Solar Load Analysis Excel template with 100% accuracy.
+A full-stack web application that automates electricity bill analysis for 
+solar system sizing. Users upload an MSEDCL electricity bill (image or PDF) 
+and receive a populated Solar Load Analysis Excel file with solar capacity 
+recommendations calculated automatically.
 
-## ✨ Key Features
-- **AI-Powered Extraction**: Uses Google Gemini 2.0 via OpenRouter for high-accuracy OCR and data parsing (even from Marathi script).
-- **Intelligent Mapping**: Seamlessly populates the Energybae Solar Load Excel template while preserving all complex formulas and logic.
-- **Support for Images & PDFs**: Built-in rendering for multi-format bill support.
-- **Clipboard Integration**: Paste bill screenshots directly from your clipboard for instant analysis.
-- **Professional UI**: Clean, mobile-responsive interface with real-time feedback and status updates.
+## How it works
 
-## 🚀 Quick Start
+1. Upload or paste an MSEDCL electricity bill image or PDF
+2. Google Gemini 2.0 Flash (via OpenRouter) extracts all relevant fields 
+   including 12-month consumption history, consumer details, and bill amounts
+3. Extracted data is mapped to the Energybae Solar Load Excel template 
+   using openpyxl — all formula rows are preserved untouched
+4. User downloads the filled Excel file with solar capacity auto-calculated
 
-### 1. Prerequisites
-Ensure you have Python 3.8+ installed.
+## Tech stack
 
-### 2. Installation
+- Backend: Flask (Python)
+- AI extraction: OpenRouter — Google Gemini 2.0 Flash
+- Excel processing: openpyxl
+- PDF support: PyMuPDF
+- Frontend: HTML, CSS, JavaScript (no frameworks)
+
+## Setup
+
 ```bash
-# Clone the repository
 git clone https://github.com/gitxpriyanshu/EnergyBae.git
 cd EnergyBae
-
-# Create and activate virtual environment
 python3 -m venv venv
 source venv/bin/activate
-
-# Install dependencies
 pip install -r requirements.txt
 ```
 
-### 3. Configuration
-Create a `.env` file in the root directory and add your OpenRouter API Key:
-```env
-OPENROUTER_API_KEY=your_key_here
+Create a `.env` file:
+OPENROUTER_API_KEY=your_openrouter_key_here
 FLASK_DEBUG=false
 PORT=5050
-```
 
-### 4. Run the App
+Run the app:
 ```bash
 python app.py
 ```
-Open [http://localhost:5050](http://localhost:5050) in your browser.
 
-## 🛠️ Technology Stack
-- **Backend**: Flask (Python)
-- **AI Engine**: OpenRouter (Google Gemini 2.0 Flash)
-- **Excel Processing**: `openpyxl`
-- **Document Handling**: `PyMuPDF` (fitz)
-- **Frontend**: Vanilla HTML5, CSS3, and JavaScript
+Open http://localhost:5050 in your browser.
 
-## 📂 Project Structure
-- `app.py`: Main Flask application and API routes.
-- `utils/bill_extractor.py`: AI extraction logic and prompt engineering.
-- `utils/excel_writer.py`: Excel template mapping and formula validation.
-- `template/`: Storage for the base Excel analyzer template.
-- `static/` & `templates/`: UI assets and frontend layout.
+## Project structure
+energybae/
+├── app.py                  # Flask routes and request handling
+├── utils/
+│   ├── bill_extractor.py   # AI extraction via OpenRouter
+│   └── excel_writer.py     # Excel template population
+├── template/
+│   └── solar_template.xlsx # Energybae Solar Load template
+├── templates/
+│   └── index.html          # Frontend UI
+├── static/
+│   └── style.css
+├── requirements.txt
+└── README.md
 
----
-Built for **Energybae** — Accelerating the Solar Revolution.
+## Live demo
+
+https://energybae.onrender.com
+
+## Notes
+
+- The Excel template formulas (rows 22-30) are never overwritten
+- Month ordering is dynamic — works for any bill date, not just the sample
+- Supports JPEG, PNG, and PDF bill formats
+- Clipboard paste supported via Ctrl+V
