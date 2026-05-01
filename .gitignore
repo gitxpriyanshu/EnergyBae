@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+.env
+*.xlsx
+!template/solar_template.xlsx
+.DS_Store
