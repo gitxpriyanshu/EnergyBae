@@ -82,6 +82,10 @@ def fill_excel(template_path: str, extracted_data: dict) -> dict:
                     units_value = val
                     break
             
+            # Fallback for the current month if not in monthly_units
+            if units_value is None and i == 11:
+                units_value = extracted_data.get('current_units')
+            
             if units_value is not None:
                 try:
                     ws.cell(row=row, column=4).value = int(float(units_value))  # Column D = index 4
