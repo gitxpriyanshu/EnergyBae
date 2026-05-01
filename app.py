@@ -9,7 +9,6 @@ from flask import Flask, render_template, request, jsonify, send_file
 from dotenv import load_dotenv
 load_dotenv()
 import fitz  # PyMuPDF
-from groq import APIError
 
 from utils import bill_extractor, excel_writer
 
@@ -63,7 +62,7 @@ def index():
 def health():
     return jsonify({
         "status": "ok", 
-        "model": "meta-llama/llama-4-scout-17b-16e-instruct"
+        "engine": "OpenRouter Gemini 2.0 Flash"
     })
 
 
@@ -84,9 +83,6 @@ def extract_preview():
     except json.JSONDecodeError as e:
         traceback.print_exc()
         return jsonify({"success": False, "error": "Bill could not be parsed. Please try a clearer image."}), 422
-    except APIError as e:
-        traceback.print_exc()
-        return jsonify({"success": False, "error": "AI service temporarily unavailable"}), 500
     except ValueError as e:
         traceback.print_exc()
         return jsonify({"success": False, "error": str(e)}), 400
@@ -128,9 +124,6 @@ def upload():
     except json.JSONDecodeError as e:
         traceback.print_exc()
         return jsonify({"success": False, "error": "Bill could not be parsed. Please try a clearer image."}), 422
-    except APIError as e:
-        traceback.print_exc()
-        return jsonify({"success": False, "error": "AI service temporarily unavailable"}), 500
     except ValueError as e:
         traceback.print_exc()
         return jsonify({"success": False, "error": str(e)}), 400
