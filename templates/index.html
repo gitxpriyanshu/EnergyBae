@@ -11,10 +11,66 @@
 <body>
 
 <div class="loading" id="loading">
-  <div class="loading-inner">
-    <div class="spinner"></div>
-    <div class="loading-msg" id="loading-msg">Reading your bill…</div>
-    <div class="loading-sub">This usually takes 10–15 seconds</div>
+  <div class="progress-card">
+    <div class="progress-title">Analyzing your bill...</div>
+    <div class="steps-container">
+      <!-- Step 1 -->
+      <div class="step-item waiting" id="step-0">
+        <div class="step-icon-wrap">
+          <div class="step-icon">
+            <div class="step-status"></div>
+          </div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Reading bill</div>
+          <div class="step-sub">Extracting text and layout</div>
+          <div class="step-ai-log" id="log-0"></div>
+        </div>
+      </div>
+      <!-- Step 2 -->
+      <div class="step-item waiting" id="step-1">
+        <div class="step-icon-wrap">
+          <div class="step-icon">
+            <div class="step-status"></div>
+          </div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Identifying fields</div>
+          <div class="step-sub">Consumer details, load, tariff</div>
+          <div class="step-ai-log" id="log-1"></div>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div class="step-item waiting" id="step-2">
+        <div class="step-icon-wrap">
+          <div class="step-icon">
+            <div class="step-status"></div>
+          </div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Reading consumption</div>
+          <div class="step-sub">12-month usage history</div>
+          <div class="step-ai-log" id="log-2"></div>
+        </div>
+      </div>
+      <!-- Step 4 -->
+      <div class="step-item waiting" id="step-3">
+        <div class="step-icon-wrap">
+          <div class="step-icon">
+            <div class="step-status"></div>
+          </div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-content">
+          <div class="step-name">Calculating solar</div>
+          <div class="step-sub">System size and panel count</div>
+          <div class="step-ai-log" id="log-3"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -94,15 +150,24 @@
   <div class="results" id="results">
 
     <section class="card" id="card-data">
-      <div class="card-head">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:8px; color:#1B5E20; opacity:0.85;">
-        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-        <polyline points="14,2 14,8 20,8"/>
-        <line x1="8" y1="13" x2="16" y2="13"/>
-        <line x1="8" y1="17" x2="16" y2="17"/>
-        <polyline points="10,9 9,9 8,9"/>
-        </svg>
-        Extracted from your bill
+      <div class="card-head" style="display:flex; justify-content:space-between; align-items:flex-start;">
+        <div style="display:flex; align-items:center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:8px; color:#1B5E20; opacity:0.85;">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14,2 14,8 20,8"/>
+          <line x1="8" y1="13" x2="16" y2="13"/>
+          <line x1="8" y1="17" x2="16" y2="17"/>
+          <polyline points="10,9 9,9 8,9"/>
+          </svg>
+          Extracted from your bill
+        </div>
+        <div style="text-align:right;">
+          <button id="btn-edit" class="btn-edit" onclick="toggleEditMode()">
+            <svg id="icon-edit" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:4px;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            <span id="text-edit">Edit values</span>
+          </button>
+          <div style="font-size:10px; color:#666; margin-top:4px;">Values auto-extracted by AI — edit if incorrect</div>
+        </div>
       </div>
       <table class="dtable" id="data-table">
         <thead><tr><th>Field</th><th>Value</th></tr></thead>
@@ -111,13 +176,19 @@
     </section>
 
     <section class="card" id="card-chart">
-      <div class="card-head">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:8px; color:#1B5E20; opacity:0.85;">
-        <line x1="18" y1="20" x2="18" y2="10"/>
-        <line x1="12" y1="20" x2="12" y2="4"/>
-        <line x1="6" y1="20" x2="6" y2="14"/>
-        </svg>
-        12-Month Consumption History
+      <div class="card-head" style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:8px; color:#1B5E20; opacity:0.85;">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          12-Month Consumption History
+        </div>
+        <button id="btn-edit-units" class="btn-edit" onclick="editUnits()">
+          <svg id="icon-edit-units" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; margin-right:4px;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          <span id="text-edit-units">Edit units</span>
+        </button>
       </div>
       <div class="bar-chart" id="bar-chart"></div>
     </section>
@@ -135,7 +206,7 @@
         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
         </svg>
-        Solar System Recommendation
+        Solar System Recommendation <span id="badge-updated" class="badge-updated" style="display:none">Updated</span>
       </div>
       <div class="solar-stats">
         <div class="stat-box">
@@ -179,6 +250,8 @@
 /* ═══ STATE ═══════════════════════════════════════════════════════ */
 let selectedFile = null;
 let extractedData = null;
+let isEditMode = false;
+let isEditUnitsMode = false;
 
 /* ═══ DOM REFS ════════════════════════════════════════════════════ */
 const $ = id => document.getElementById(id);
@@ -203,23 +276,80 @@ const barChart      = $('bar-chart');
 function fmtBytes(b){if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(1)+' MB'}
 function prettify(k){return k.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}
 
-function showLoading(){loading.classList.add('active');rotateMessages()}
-function hideLoading(){loading.classList.remove('active');clearInterval(window._msgTimer)}
+function showLoading(){loading.classList.add('active')}
+function hideLoading(){loading.classList.remove('active')}
 
-const STATUS_MSGS = [
-  'Reading your bill…',
-  'Extracting consumption data…',
-  'Calculating solar requirements…',
-  'Preparing your report…'
+function startLoadingSequence() {
+  showLoading();
+  // Reset steps
+  document.querySelectorAll('.step-item').forEach(el => {
+    el.classList.remove('active', 'complete');
+    el.classList.add('waiting');
+    el.querySelector('.step-status').innerHTML = '';
+  });
+  
+  const delays = [0, 1500, 3000, 4500];
+  window._stepTimers = [];
+
+  delays.forEach((delay, i) => {
+    let t1 = setTimeout(() => setStepActive(i), delay);
+    window._stepTimers.push(t1);
+    if (i < 3) {
+      let t2 = setTimeout(() => setStepComplete(i), delay + 1400);
+      window._stepTimers.push(t2);
+    }
+  });
+}
+
+const AI_LOGS = [
+  ["Analyzing pixel density...", "Detecting document edges...", "Scanning OCR layers...", "Optimizing image contrast...", "Extracting raw text strings..."],
+  ["Pattern matching metadata...", "Identifying consumer name...", "Validating meter number...", "Parsing tariff categories...", "Detecting load capacity..."],
+  ["Reading unit history table...", "Digitizing bar chart data...", "Verifying monthly totals...", "Smoothing data gaps...", "Mapping 12-month sequence..."],
+  ["Running efficiency models...", "Simulating panel yield...", "Calculating optimal kW size...", "Estimating panel count...", "Finalizing load analysis..."]
 ];
-function rotateMessages(){
-  let i = 0;
-  loadingMsg.textContent = STATUS_MSGS[0];
-  window._msgTimer = setInterval(()=>{
-    i = (i + 1) % STATUS_MSGS.length;
-    loadingMsg.style.opacity = 0;
-    setTimeout(()=>{loadingMsg.textContent = STATUS_MSGS[i];loadingMsg.style.opacity = 1}, 200);
-  }, 3000);
+
+function setStepActive(index) {
+  const step = $(`step-${index}`);
+  if (!step) return;
+  step.classList.remove('waiting', 'complete');
+  step.classList.add('active');
+  step.querySelector('.step-status').innerHTML = '<div class="loading-spinner-small"></div>';
+  
+  // Start AI logs for this step
+  const logContainer = $(`log-${index}`);
+  if (logContainer) {
+    let logIdx = 0;
+    logContainer.innerHTML = `<div class="log-entry">${AI_LOGS[index][0]}</div>`;
+    step._logTimer = setInterval(() => {
+      logIdx = (logIdx + 1) % AI_LOGS[index].length;
+      logContainer.innerHTML = `<div class="log-entry">${AI_LOGS[index][logIdx]}</div>`;
+    }, 800); // Speed up to 800ms
+  }
+}
+
+function setStepComplete(index) {
+  const step = $(`step-${index}`);
+  if (!step) return;
+  
+  // Stop AI logs but keep the last one visible
+  if (step._logTimer) clearInterval(step._logTimer);
+
+  step.classList.remove('waiting', 'active');
+  step.classList.add('complete');
+  step.querySelector('.step-status').innerHTML = '<svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+}
+
+function finishLoadingSequence() {
+  // Clear any pending timers
+  if (window._stepTimers) window._stepTimers.forEach(t => clearTimeout(t));
+  
+  // Mark all previous steps as complete
+  for(let i=0; i<3; i++) setStepComplete(i);
+  
+  setStepComplete(3);
+  setTimeout(() => {
+    hideLoading();
+  }, 800);
 }
 
 function showError(msg){errorMsg.textContent = msg;alertErr.classList.add('visible')}
@@ -307,7 +437,7 @@ function resetFile(){
 btnAnalyze.addEventListener('click', async ()=>{
   if(!selectedFile) return;
   hideError();
-  showLoading();
+  startLoadingSequence();
   btnAnalyze.disabled = true;
 
   const fd = new FormData();
@@ -319,6 +449,7 @@ btnAnalyze.addEventListener('click', async ()=>{
     if(!json.success) throw new Error(json.error || 'Extraction failed.');
     extractedData = json.data;
     renderResults(extractedData);
+    finishLoadingSequence();
     results.classList.add('visible');
     results.scrollIntoView({behavior:'smooth', block:'start'});
   } catch(err){
@@ -336,6 +467,13 @@ btnAnalyze.addEventListener('click', async ()=>{
 
 /* ═══ RENDER RESULTS ══════════════════════════════════════════════ */
 function renderResults(data){
+  // Merge current_units into monthly_units for the latest month
+  if (!data.monthly_units) data.monthly_units = {};
+  const bMonth = data.bill_month || "January 2026";
+  if (data.monthly_units[bMonth] === undefined && data.current_units !== undefined) {
+      data.monthly_units[bMonth] = data.current_units;
+  }
+  
   // ── Data table ──
   dataTbody.innerHTML = '';
   const displayFields = [
@@ -347,10 +485,10 @@ function renderResults(data){
     ['billing_unit',       'Billing Unit'],
     ['meter_number',       'Meter Number'],
     ['bill_month',         'Latest Bill Month'],
-    ['current_units',      'Units This Month'],
     ['latest_bill_amount', 'Latest Bill Amount'],
     ['gstin',              'GSTIN'],
   ];
+
   for(const [key, label] of displayFields){
     let v = data[key];
     const tr = document.createElement('tr');
@@ -364,49 +502,76 @@ function renderResults(data){
       }
     }
     
+    let cellContent = isNull ? '—' : v;
+    if (isEditMode && editableKeys.includes(key)) {
+      cellContent = `<input type="text" class="edit-input" data-key="${key}" value="${isNull ? '' : v}">`;
+      warningHtml = '';
+    }
+    
     tr.innerHTML = `<td class="lbl"><span class="check">${isNull ? '○' : '✓'}</span>${label}</td>
-                    <td class="val${isNull?' null':''}">${isNull ? '—' : v}${warningHtml}</td>`;
+                    <td class="val${isNull?' null':''}" id="cell-${key}">${cellContent}${warningHtml}</td>`;
     dataTbody.appendChild(tr);
   }
 
   // ── Bar chart ──
+  renderBarChart(data);
+  recalculateSolar(data);
+}
+
+function renderBarChart(data) {
   barChart.innerHTML = '';
   const monthly = data.monthly_units || {};
-  const entries = Object.entries(monthly);
-  if(entries.length){
-    const maxVal = Math.max(...entries.map(([,v])=>v||0));
-    const peakMonth = entries.reduce((a,b)=>(b[1]||0)>(a[1]||0)?b:a)[0];
+  const monthOrder = [
+    "February 2025","March 2025","April 2025","May 2025",
+    "June 2025","July 2025","August 2025","September 2025",
+    "October 2025","November 2025","December 2025","January 2026"
+  ];
 
-    for(const [month, units] of entries){
-      const pct = maxVal > 0 ? Math.max(((units||0)/maxVal)*100, 2) : 2;
-      const isPeak = month === peakMonth;
-      // Short month name
-      const parts = month.split(' ');
-      const shortMonth = (parts[0]||'').substring(0,3) + ' ' + (parts[1]||'').slice(-2);
+  // Build entries from fixed monthOrder, defaulting missing months to 0
+  const entries = monthOrder.map(m => [m, parseFloat(monthly[m]) || 0]);
+  const maxVal = Math.max(...entries.map(([,v]) => v), 1);
+  const peakMonth = entries.reduce((a, b) => b[1] > a[1] ? b : a)[0];
 
-      const row = document.createElement('div');
-      row.className = 'bar-row';
+  for (const [month, u] of entries) {
+    const pct = maxVal > 0 ? Math.max((u / maxVal) * 100, 2) : 2;
+    const isPeak = month === peakMonth;
+    const parts = month.split(' ');
+    const shortMonth = (parts[0] || '').substring(0, 3) + ' ' + (parts[1] || '').slice(-2);
+
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+
+    if (isEditUnitsMode) {
+      row.innerHTML = `
+        <div class="bar-month">${shortMonth}</div>
+        <div class="bar-track" style="display:flex; align-items:center; background:transparent; overflow:visible; gap:12px;">
+          <div style="flex:1; height:26px; background:var(--green-50); border-radius:4px; position:relative; overflow:hidden;">
+            <div class="bar-fill${isPeak ? ' peak' : ''}" style="width:${pct}%; height:100%;"></div>
+          </div>
+          <input type="number" class="bar-val-edit" data-month="${month}" value="${u}"
+            style="width:75px; padding:4px 8px; border:1.5px solid #1B5E20; border-radius:6px; font-size:13px; color:#1B5E20; background:#fff; font-family:inherit; flex-shrink:0;"
+            onkeydown="if(event.key==='Enter') this.blur()">
+        </div>`;
+    } else {
       row.innerHTML = `
         <div class="bar-month">${shortMonth}</div>
         <div class="bar-track">
-          <div class="bar-fill${isPeak?' peak':''}" style="width:${pct}%">
-            ${pct > 18 ? `<span class="bar-val">${units}</span>` : ''}
+          <div class="bar-fill${isPeak ? ' peak' : ''}" style="width:${pct}%">
+            ${pct > 18 ? `<span class="bar-val">${u}</span>` : ''}
           </div>
-          ${pct <= 18 ? `<span class="bar-val-out">${units}</span>` : ''}
+          ${pct <= 18 ? `<span class="bar-val-out">${u}</span>` : ''}
         </div>`;
-      barChart.appendChild(row);
     }
+    barChart.appendChild(row);
   }
+}
 
-  // ── Solar calculations (mirroring Excel formulas) ──
-  // D22 = AVERAGE(D9:D21)
-  // D23 = (D22 * 12 * 1.1) / 1400
-  // D24 = D23 / C7 * 1000   (C7 = 600)
-  // D25 = ROUND(D24, 0) * C7 / 1000
-  // D26 = D25 / C7 * 1000
-  const unitValues = entries.map(([,v])=>v||0);
+function recalculateSolar(data) {
+  const monthly = data.monthly_units || {};
+  const entries = Object.entries(monthly);
+  const unitValues = entries.map(([,v])=>parseFloat(v)||0);
   const numMonths = unitValues.length || 1;
-  const totalUnits = unitValues.reduce((a,b)=>a + parseInt(b, 10), 0);
+  const totalUnits = unitValues.reduce((a,b)=>a + b, 0);
   const avgUnits = totalUnits / numMonths;
   
   if (avgUnits > 10000 || isNaN(avgUnits)) {
@@ -419,26 +584,124 @@ function renderResults(data){
   
   const kwNeeded = (avgUnits * 12 * 1.1) / 1400;
   const panelsRaw = kwNeeded / 0.6;
-  const numPanels = Math.round(panelsRaw);
-  const solarCapacity = numPanels * 0.6;
+  const numPanels = Math.ceil(panelsRaw);
+  const solarCapacity = Math.ceil(kwNeeded / 0.6) * 0.6;
 
   $('stat-avg').textContent = Math.round(avgUnits);
   $('stat-kw').textContent = solarCapacity.toFixed(1);
   $('stat-panels').textContent = numPanels;
 }
 
+/* ═══ EDIT FUNCTIONALITY ══════════════════════════════════════════ */
+const editableKeys = ['consumer_name', 'consumer_number', 'connection_type', 'sanctioned_load_kw', 'fixed_charges', 'billing_unit', 'meter_number', 'bill_month', 'latest_bill_amount', 'gstin'];
+
+function toggleEditMode() {
+  isEditMode = !isEditMode;
+  const btn = $('btn-edit');
+  const icon = $('icon-edit');
+  const text = $('text-edit');
+  
+  if (isEditMode) {
+    btn.classList.add('active');
+    text.textContent = 'Save changes';
+    icon.innerHTML = '<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline>';
+    renderResults(extractedData);
+  } else {
+    // Save changes
+    const inputs = document.querySelectorAll('.edit-input');
+    inputs.forEach(input => {
+      const key = input.getAttribute('data-key');
+      const month = input.getAttribute('data-month');
+      let val = input.value.trim();
+      
+      // Try to cast to number if it looks like one, unless it's a connection type or name
+      if (!['consumer_name', 'connection_type', 'billing_unit', 'gstin'].includes(key) && val !== '' && !isNaN(val)) {
+        val = parseFloat(val);
+      }
+      
+      if (key) {
+        extractedData[key] = val === '' ? null : val;
+      } else if (month) {
+        extractedData.monthly_units[month] = val === '' ? 0 : parseFloat(val);
+      }
+    });
+    
+    // Sync January 2026 to current_units
+    if (extractedData.monthly_units && extractedData.monthly_units["January 2026"] !== undefined) {
+        extractedData.current_units = extractedData.monthly_units["January 2026"];
+    }
+    
+    btn.classList.remove('active');
+    text.textContent = 'Edit values';
+    icon.innerHTML = '<path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>';
+    
+    $('badge-updated').style.display = 'inline-block';
+    renderResults(extractedData);
+  }
+}
+
+function editUnits() {
+  isEditUnitsMode = !isEditUnitsMode;
+  const btn = $('btn-edit-units');
+  const icon = $('icon-edit-units');
+  const text = $('text-edit-units');
+  
+  if (isEditUnitsMode) {
+    btn.classList.add('active');
+    text.textContent = 'Save units';
+    icon.innerHTML = '<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline>';
+    renderBarChart(extractedData);
+  } else {
+    // Save changes
+    const inputs = document.querySelectorAll('.bar-val-edit');
+    inputs.forEach(input => {
+      const month = input.getAttribute('data-month');
+      let val = input.value.trim();
+      if (month) {
+        extractedData.monthly_units[month] = val === '' ? 0 : parseFloat(val);
+      }
+    });
+    
+    // Sync January 2026 to current_units
+    if (extractedData.monthly_units && extractedData.monthly_units["January 2026"] !== undefined) {
+        extractedData.current_units = extractedData.monthly_units["January 2026"];
+    }
+    
+    btn.classList.remove('active');
+    text.textContent = 'Edit units';
+    icon.innerHTML = '<path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>';
+    
+    $('badge-updated').style.display = 'inline-block';
+    renderBarChart(extractedData);
+    recalculateSolar(extractedData);
+  }
+}
+
 /* ═══ DOWNLOAD EXCEL ══════════════════════════════════════════════ */
 btnDownload.addEventListener('click', async ()=>{
   if(!selectedFile) return;
-  showLoading();
-  loadingMsg.textContent = 'Generating your Excel report…';
+  // Simple loading for download
   btnDownload.disabled = true;
+  const originalText = btnDownload.innerHTML;
+  btnDownload.innerHTML = '<div class="loading-spinner-small" style="margin:0 auto; border-top-color:#fff;"></div>';
 
   const fd = new FormData();
-  fd.append('file', selectedFile);
-
+  if (isEditMode) {
+    toggleEditMode(); // save before downloading
+  }
+  
   try {
-    const resp = await fetch('/upload', {method:'POST', body:fd});
+    let resp;
+    if (!extractedData) {
+      fd.append('file', selectedFile);
+      resp = await fetch('/upload', {method:'POST', body:fd});
+    } else {
+      resp = await fetch('/download-from-data', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(extractedData)
+      });
+    }
     if(!resp.ok){
       const err = await resp.json().catch(()=>({}));
       throw new Error(err.error || 'Server error ('+resp.status+')');
@@ -465,8 +728,8 @@ btnDownload.addEventListener('click', async ()=>{
   } catch(err){
     showError(err.message || 'Failed to generate Excel.');
   } finally {
-    hideLoading();
     btnDownload.disabled = false;
+    btnDownload.innerHTML = originalText;
   }
 });
 </script>
