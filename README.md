@@ -1,28 +1,34 @@
 # Energybae Solar Load Calculator
 
-A full-stack web application that automates electricity bill analysis for 
-solar system sizing. Users upload an MSEDCL electricity bill (image or PDF) 
-and receive a populated Solar Load Analysis Excel file with solar capacity 
-recommendations calculated automatically.
+A premium, full-stack web application that automates electricity bill analysis for solar system sizing. Users upload an MSEDCL bill and receive a precise solar system recommendation along with a populated Solar Load Analysis Excel report.
 
-## How it works
+## ✨ Key Features
 
-1. Upload or paste an MSEDCL electricity bill image or PDF
-2. Google Gemini 2.0 Flash (via OpenRouter) extracts all relevant fields 
-   including 12-month consumption history, consumer details, and bill amounts
-3. Extracted data is mapped to the Energybae Solar Load Excel template 
-   using openpyxl — all formula rows are preserved untouched
-4. User downloads the filled Excel file with solar capacity auto-calculated
+- **Real-time AI Progress**: An immersive 4-step analysis UI (Reading, Identifying, History, Calculation) with live technical AI logs.
+- **AI-Powered Extraction**: Uses Google Gemini 2.0 Flash to extract 12-month consumption history and consumer metadata with high precision.
+- **Interactive Data Editor**: 
+  - **Consumption History**: A dynamic 12-month bar chart with inline unit editing.
+  - **Consumer Info**: Full metadata editor for correcting AI-extracted details.
+- **Excel Automation**: Maps data to the Energybae Solar Load template while preserving all internal formulas and formatting.
+- **Smart Sizing**: Instant recommendation of Solar System Capacity (kW) and Panel Count (600W panels).
 
-## Tech stack
+## 🚀 How it Works
 
-- Backend: Flask (Python)
-- AI extraction: OpenRouter — Google Gemini 2.0 Flash
-- Excel processing: openpyxl
-- PDF support: PyMuPDF
-- Frontend: HTML, CSS, JavaScript (no frameworks)
+1. **Upload**: Drag-and-drop or paste (Ctrl+V) an MSEDCL bill (Image or PDF).
+2. **AI Analysis**: The system performs a multi-step scan to extract name, load, tariff, and 12 months of usage data.
+3. **Review & Refine**: Check the extracted data on the interactive dashboard. Correct any units directly on the bar chart.
+4. **Download**: Export the finalized data into a professional Solar Load Analysis Excel report.
 
-## Setup
+## 🛠️ Tech Stack
+
+- **Backend**: Flask (Python 3.x)
+- **AI Engine**: OpenRouter (Google Gemini 2.0 Flash)
+- **Excel Engine**: Openpyxl
+- **PDF Engine**: PyMuPDF (fitz)
+- **Frontend**: Vanilla JavaScript, CSS3 (Glassmorphism design system)
+- **Deployment**: Configured for Vercel and Render
+
+## 📦 Setup & Installation
 
 ```bash
 git clone https://github.com/gitxpriyanshu/EnergyBae.git
@@ -33,39 +39,40 @@ pip install -r requirements.txt
 ```
 
 Create a `.env` file:
-OPENROUTER_API_KEY=your_openrouter_key_here
+```env
+OPENROUTER_API_KEY=your_key_here
 FLASK_DEBUG=false
 PORT=5050
+```
 
-Run the app:
+Run locally:
 ```bash
 python app.py
 ```
 
-Open http://localhost:5050 in your browser.
+## 📂 Project Structure
 
-## Project structure
-energybae/
-├── app.py                  # Flask routes and request handling
+```text
+EnergyBae/
+├── app.py                  # Flask routes & Logic
 ├── utils/
-│   ├── bill_extractor.py   # AI extraction via OpenRouter
-│   └── excel_writer.py     # Excel template population
+│   ├── bill_extractor.py   # AI Logic (OpenRouter)
+│   └── excel_writer.py     # Excel Template Population
 ├── template/
-│   └── solar_template.xlsx # Energybae Solar Load template
+│   └── solar_template.xlsx # Professional Excel Template
 ├── templates/
-│   └── index.html          # Frontend UI
+│   └── index.html          # Main UI with Progress Logic
 ├── static/
-│   └── style.css
-├── requirements.txt
-└── README.md
+│   └── style.css           # Glassmorphism Design System
+├── vercel.json             # Vercel Deployment Config
+└── requirements.txt
+```
 
-## Live demo
+## 📝 Notes
 
-https://energybae.onrender.com
+- **Template Integrity**: Formulas in the Excel template are never overwritten; only raw data cells are populated.
+- **Clipboard Support**: Supports direct screenshot pasting for faster workflow.
+- **Responsive**: Fully optimized for mobile and desktop screens.
 
-## Notes
-
-- The Excel template formulas (rows 22-30) are never overwritten
-- Month ordering is dynamic — works for any bill date, not just the sample
-- Supports JPEG, PNG, and PDF bill formats
-- Clipboard paste supported via Ctrl+V
+---
+Built with ⚡ by [Energybae](https://energybae.in)
