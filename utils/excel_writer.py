@@ -82,13 +82,20 @@ def fill_excel(template_path: str, extracted_data: dict) -> dict:
                     units_value = val
                     break
             
-            # Fallback for the current month if not in monthly_units
-            if units_value is None and i == 11:
+            # Fallback for the current month if not in monthly_units OR if it is 0
+            if (units_value is None or str(units_value) == '0') and i == 11:
                 units_value = extracted_data.get('current_units')
             
             if units_value is not None:
                 try:
-                    ws.cell(row=row, column=4).value = int(float(units_value))  # Column D = index 4
+                    val = float(units_value)
+                    ws.cell(row=row, column=4).value = int(val)  # Column D = index 4
+                    
+                    # If this is the latest month, we can also calculate Unit Cost in Column F
+                    if i == 11 and extracted_data.get('latest_bill_amount'):
+                        latest_amt = float(extracted_data['latest_bill_amount'])
+                        if val > 0:
+                            ws.cell(row=row, column=6).value = round(latest_amt / val, 2) # Column F = index 6
                 except (ValueError, TypeError):
                     ws.cell(row=row, column=4).value = units_value
         

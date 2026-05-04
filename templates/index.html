@@ -687,7 +687,10 @@ btnDownload.addEventListener('click', async ()=>{
 
   const fd = new FormData();
   if (isEditMode) {
-    toggleEditMode(); // save before downloading
+    toggleEditMode(); // save consumer info before downloading
+  }
+  if (isEditUnitsMode) {
+    editUnits(); // save bar units before downloading
   }
   
   try {
