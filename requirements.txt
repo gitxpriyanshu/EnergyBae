@@ -4,4 +4,3 @@ openpyxl
 python-dotenv
 PyMuPDF
 python-dateutil
-gunicorn

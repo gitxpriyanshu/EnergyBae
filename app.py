@@ -162,6 +162,5 @@ def download_from_data():
 
 
 if __name__ == '__main__':
-    port = int(os.getenv("PORT", 5000))
-    debug = os.getenv("FLASK_DEBUG", "true").lower() == "true"
-    app.run(host="0.0.0.0", port=port, debug=debug)
+    port = int(os.getenv("PORT", 5050))
+    app.run(host="0.0.0.0", port=port, debug=True)

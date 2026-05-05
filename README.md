@@ -25,7 +25,7 @@ A professional full-stack solution for automated electricity bill analysis and s
 - **AI Integration**: OpenRouter (Google Gemini 2.0 Flash)
 - **Data Processing**: Openpyxl, PyMuPDF (fitz)
 - **Frontend**: Vanilla JavaScript (ES6+), CSS3 Design System
-- **Deployment**: Configured for Vercel and Render environments
+- **Deployment**: Configured for Vercel environment
 
 ## Installation & Environment Setup
 

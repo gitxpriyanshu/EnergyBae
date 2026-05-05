@@ -611,18 +611,13 @@ function toggleEditMode() {
     const inputs = document.querySelectorAll('.edit-input');
     inputs.forEach(input => {
       const key = input.getAttribute('data-key');
-      const month = input.getAttribute('data-month');
       let val = input.value.trim();
-      
-      // Try to cast to number if it looks like one, unless it's a connection type or name
       if (!['consumer_name', 'connection_type', 'billing_unit', 'gstin'].includes(key) && val !== '' && !isNaN(val)) {
         val = parseFloat(val);
       }
       
       if (key) {
         extractedData[key] = val === '' ? null : val;
-      } else if (month) {
-        extractedData.monthly_units[month] = val === '' ? 0 : parseFloat(val);
       }
     });
     
